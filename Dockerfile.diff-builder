@@ -1,0 +1,27 @@
+## SYSTEM
+
+FROM hexpm/elixir:1.11.2-erlang-23.2.1-alpine-3.12.1
+WORKDIR /app
+
+ENV LANG=C.UTF-8 \
+    LANGUAGE=C:en \
+    LC_ALL=C.UTF-8 \
+    TERM=xterm \
+    MIX_ENV=prod
+
+RUN apk update && \
+    apk --no-cache --update add \
+      make \
+      g++ \
+      wget \
+      curl \
+      inotify-tools \
+      nodejs \
+      nodejs-npm && \
+    update-ca-certificates --fresh && \
+    rm -rf /var/cache/apk/*
+
+RUN mix local.rebar --force && \
+    mix local.hex --if-missing --force
+
+CMD ["/bin/bash"]
