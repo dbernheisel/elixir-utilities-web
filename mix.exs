@@ -62,6 +62,8 @@ defmodule Utility.MixProject do
       {:sentry, "~> 8.0"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
+      {:ueberauth, "~> 0.6"},
+      {:ueberauth_github, "~> 0.7"},
       # Test
       {:floki, ">= 0.0.0", only: :test},
       # Dev

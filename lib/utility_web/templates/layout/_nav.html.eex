@@ -32,6 +32,15 @@
               <%= active_link @conn, "about", "About",
                 to: Routes.page_path(@conn, :about),
                 class: "nav-link" %>
+
+              <%= if @current_user do %>
+                <h2><%= @current_user.username %></h2>
+                <img src="<%= @current_user.avatar %>" class="inline-block h-10 w-10 rounded-full"/>
+                <br>
+                <%= link "Logout", to: "/logout", class: "" %>
+              <% else %>
+                <%= link "Sign in with GitHub", to: Routes.auth_path(@conn, :request, "github") %>
+              <% end %>
             </nav>
           </div>
         </nav>

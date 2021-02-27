@@ -30,6 +30,10 @@ if dsn = System.get_env("SENTRY_DSN") do
     }
 end
 
+config :ueberauth, Ueberauth.Strategy.Github.OAuth,
+  client_id: System.fetch_env!("GITHUB_CLIENT_ID"),
+  client_secret: System.fetch_env!("GITHUB_CLIENT_SECRET")
+
 config :utility, UtilityWeb.Endpoint,
   http: [port: {:system, "PORT"}, compress: true],
   url: [scheme: "https", host: host, port: 443],

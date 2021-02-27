@@ -6,6 +6,7 @@ defmodule UtilityWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
+    plug :current_user
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :put_root_layout, {UtilityWeb.LayoutView, :root}
@@ -23,6 +24,12 @@ defmodule UtilityWeb.Router do
     plug :check_auth
   end
 
+  scope "/auth", UtilityWeb do
+    pipe_through [:browser]
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
+  end
+
   scope "/", UtilityWeb do
     pipe_through [:browser]
 
@@ -34,6 +41,8 @@ defmodule UtilityWeb.Router do
     live "/sink/view/:id", SinkLive, :show
     live "/gendiff", GenDiffLive, :new
     get "/gendiff/:project/:id", GenDiffController, :show
+    get "/logout", AuthController, :delete
+    delete "/logout", AuthController, :delete
   end
 
   scope "/", UtilityWeb do
@@ -65,5 +74,13 @@ defmodule UtilityWeb.Router do
         |> Plug.BasicAuth.request_basic_auth()
         |> halt()
     end
+  end
+
+  def current_user(conn, _opts) do
+    Plug.Conn.assign(
+      conn,
+      :current_user,
+      Plug.Conn.get_session(conn, :current_user)
+    )
   end
 end

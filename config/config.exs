@@ -39,6 +39,20 @@ config :mime, :types, %{
   "application/manifest+json" => ["webmanifest"]
 }
 
+config :ueberauth, Ueberauth,
+  json_library: Jason,
+  providers: [
+    github: {Ueberauth.Strategy.Github, [
+      allow_private_emails: true,
+      send_redirect_uri: true,
+      default_scope: "read:user"
+    ]}
+  ]
+
+config :ueberauth, Ueberauth.Strategy.Github.OAuth,
+  client_id: System.get_env("GITHUB_CLIENT_ID"),
+  client_secret: System.get_env("GITHUB_CLIENT_SECRET")
+
 config :logger,
   backends: [:console, Sentry.LoggerBackend]
 
